@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ShoppingBag, User, Search, Menu, Plus, X, CheckCircle, Lock } from 'lucide-react';
+import { ShoppingBag, User, Menu, Plus, X, CheckCircle, Lock } from 'lucide-react';
 
 interface HeaderProps {
   currentAgenda: number;
@@ -28,6 +28,14 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
     window.open(url, '_blank');
   };
 
+  const handleWebClick = () => {
+    window.open('https://gconline.online', '_blank');
+  };
+
+  const handleShopClick = () => {
+    window.open('https://www.gucci.com', '_blank');
+  };
+
   // Helper to check if an agenda is locked based on previous approval
   const isLocked = (id: number) => {
     if (id === 1) return false; // Agenda 1 always open
@@ -47,9 +55,8 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
 
           {/* Icons */}
           <div className="flex items-center space-x-5 text-black">
-            <ShoppingBag size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" />
-            <User size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" />
-            <Search size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" />
+            <ShoppingBag size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" onClick={handleShopClick} />
+            <User size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" onClick={handleWebClick} />
             <button onClick={toggleMenu} className="focus:outline-none hover:opacity-70">
               {isMenuOpen ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
             </button>
