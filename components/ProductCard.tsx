@@ -20,7 +20,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Image Container */}
       <div className={`relative w-full aspect-square bg-[#f5f5f5] flex items-center justify-center mb-4 overflow-hidden group ${!isApproved ? 'cursor-pointer' : ''}`}>
         {/* Number Badge */}
-        <div className="absolute top-4 left-4 w-8 h-8 bg-white rounded-full flex items-center justify-center text-sm font-bold shadow-sm z-10 font-sans text-gray-800">
+        <div className="absolute top-4 left-4 w-8 h-8 bg-white rounded-full flex items-center justify-center text-sm font-bold shadow-sm z-10 font-sans text-black">
           {product.id}
         </div>
 

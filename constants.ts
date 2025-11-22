@@ -52,8 +52,9 @@ const AGENDA_PRICES: Record<number, number[]> = {
 // Image Override Configuration map
 const AGENDA_IMAGES: Record<number, Record<number, string>> = {
   1: {
-    1: "https://media.gucci.com/style/DarkGray_Center_0_0_980x980/1729680305/802730_99999_0099_002_100_0000_Light-gucci-bloom-gift-set.jpg",
-    3: "https://perfumeoasis.co.uk/cdn/shop/files/GSMAGMNEW.jpg?v=1751975757"
+    1: "https://i5.walmartimages.com/seo/134-Value-Gucci-Bloom-Perfume-Gift-set-for-Women-2-Pieces_de0ff14d-25ae-48f5-b80a-37344bfac5cc_1.49e8fd674186487a044104a0392ea8d3.jpeg",
+    3: "https://perfumeoasis.co.uk/cdn/shop/files/GSMAGMNEW.jpg?v=1751975757",
+    4: "https://www.perfumedirect.com/cdn/shop/files/gucci-women-s-perfume-gucci-guilty-pour-femme-eau-de-parfum-women-s-gift-set-spray-50ml-with-50ml-body-lotion-72784461922681_large.png"
   },
   2: {
     1: "https://media.gucci.com/style/DarkGray_Center_0_0_1200x1200/1758094278/825787_Z7AVP_5057_001_100_0000_Light-printed-georgette-long-pleated-dress.jpg",
