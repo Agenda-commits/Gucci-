@@ -11,8 +11,21 @@ import { Product } from './types';
 const App: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   
-  // Removed localStorage persistence. State resets on reload.
-  const [approvedAgendas, setApprovedAgendas] = useState<number[]>([]);
+  // Initialize state from localStorage to persist data on this device
+  const [approvedAgendas, setApprovedAgendas] = useState<number[]>(() => {
+    try {
+      const saved = localStorage.getItem('gucci_approved_agendas');
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error("Failed to load from localStorage", error);
+      return [];
+    }
+  });
+
+  // Save to localStorage whenever approvedAgendas changes
+  useEffect(() => {
+    localStorage.setItem('gucci_approved_agendas', JSON.stringify(approvedAgendas));
+  }, [approvedAgendas]);
 
   // Default to Agenda 1 on load
   const [currentAgenda, setCurrentAgenda] = useState<number>(1);
@@ -21,7 +34,7 @@ const App: React.FC = () => {
   const isAgendaLocked = (agendaId: number) => {
     // Agenda 1 is always open
     if (agendaId === 1) return false;
-    // Collections (100) is open only if Agenda 1 is approved (Previously Agenda 5)
+    // Collections (100) is open only if Agenda 1 is approved
     if (agendaId === 100) return !approvedAgendas.includes(1);
     
     // Sequential locking: Agenda N is locked if Agenda N-1 is NOT in approved list
