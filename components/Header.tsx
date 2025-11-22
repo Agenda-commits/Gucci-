@@ -31,7 +31,7 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
   // Helper to check if an agenda is locked based on previous approval
   const isLocked = (id: number) => {
     if (id === 1) return false; // Agenda 1 always open
-    if (id === 100) return !approvedAgendas.includes(5); // Collection unlocks after Agenda 5
+    if (id === 100) return !approvedAgendas.includes(1); // Collection unlocks after Agenda 1
     return !approvedAgendas.includes(id - 1);
   };
 
@@ -122,6 +122,12 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
             >
               Collections
               {isLocked(100) && <Lock size={12} />}
+              {!isLocked(100) && approvedAgendas.includes(100) && (
+                <div className="flex items-center bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ml-2">
+                  <CheckCircle size={12} className="mr-1" />
+                  Approved
+                </div>
+              )}
             </button>
           </div>
         </div>

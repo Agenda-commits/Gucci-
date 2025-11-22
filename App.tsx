@@ -21,8 +21,8 @@ const App: React.FC = () => {
   const isAgendaLocked = (agendaId: number) => {
     // Agenda 1 is always open
     if (agendaId === 1) return false;
-    // Collections (100) is open only if Agenda 5 is approved
-    if (agendaId === 100) return !approvedAgendas.includes(5);
+    // Collections (100) is open only if Agenda 1 is approved (Previously Agenda 5)
+    if (agendaId === 100) return !approvedAgendas.includes(1);
     
     // Sequential locking: Agenda N is locked if Agenda N-1 is NOT in approved list
     return !approvedAgendas.includes(agendaId - 1);
