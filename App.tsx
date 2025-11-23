@@ -95,16 +95,16 @@ const App: React.FC = () => {
       if (currentAgenda === 1) {
         // Agenda 1 specific logic
         const phoneNumber = "6281325808529";
-        const message = `Halo Admin, saya telah memilih *PAKET 1*. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nHarga: ${selectedProduct.price}\nKeuntungan: ${selectedProduct.profit}`;
+        const message = `Halo Admin, saya telah memilih Agenda no 1 Paket No ${selectedProduct.id} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
       } else {
         // Logic for Agenda 2, 3, 4, 5 and Collection (100)
-        const phoneNumber = "6282261676018";
-        const agendaName = currentAgenda === 100 ? "COLLECTION" : `AGENDA ${currentAgenda}`;
+        const phoneNumber = "6281385616098";
+        const agendaName = currentAgenda === 100 ? "COLLECTION" : `${currentAgenda}`;
         
         // New message format for Advisor
-        const message = `Hallo , Advisor saya telah memilih paket no ${agendaName}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nHarga: ${selectedProduct.price}\nKeuntungan: ${selectedProduct.profit}`;
+        const message = `Hallo , Advisor saya telah memilih Agenda no ${agendaName} Paket No ${selectedProduct.id} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
       }
@@ -155,7 +155,7 @@ const App: React.FC = () => {
              <CollectionsPage 
                onSelect={(item) => {
                  handleSelectProduct({
-                   id: 999, 
+                   id: 1, 
                    name: item.name,
                    price: item.price,
                    benefit: item.benefitPercent,
