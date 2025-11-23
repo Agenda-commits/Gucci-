@@ -4,12 +4,14 @@ import { Header } from './components/Header';
 import { ProductCard } from './components/ProductCard';
 import { CollectionsPage } from './components/CollectionsPage';
 import { ConfirmationPage } from './components/ConfirmationPage';
+import { PaymentPage } from './components/PaymentPage';
 import { Footer } from './components/Footer';
 import { GET_PRODUCTS } from './constants';
 import { Product } from './types';
 
 const App: React.FC = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showPayment, setShowPayment] = useState(false);
   
   // Initialize state from localStorage to persist data on this device
   const [approvedAgendas, setApprovedAgendas] = useState<number[]>(() => {
@@ -69,22 +71,40 @@ const App: React.FC = () => {
     }
     setCurrentAgenda(agendaId);
     setSelectedProduct(null); // Reset selected product to show list
+    setShowPayment(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Scroll to top when switching pages
   const handleSelectProduct = (product: Product) => {
     setSelectedProduct(product);
+    setShowPayment(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleBack = () => {
+    if (showPayment) {
+      setShowPayment(false);
+      return;
+    }
     setSelectedProduct(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Handle Order Confirmation
+  // Handle Initial Confirm Button Click (Pre-Payment or Direct)
   const handleConfirmOrder = () => {
+    if (currentAgenda === 1) {
+      // For Agenda 1, show Payment Page first
+      setShowPayment(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // For others, proceed directly
+      finalizeOrder();
+    }
+  };
+
+  // Finalize Order (Send WA, Approve, Move Next)
+  const finalizeOrder = () => {
     // 1. Mark current agenda as approved if not already
     if (!approvedAgendas.includes(currentAgenda)) {
       const newApproved = [...approvedAgendas, currentAgenda];
@@ -103,8 +123,11 @@ const App: React.FC = () => {
         const phoneNumber = "6281385616098";
         const agendaName = currentAgenda === 100 ? "COLLECTION" : `${currentAgenda}`;
         
-        // New message format for Advisor
-        const message = `Hallo , Advisor saya telah memilih Agenda no ${agendaName} Paket No ${selectedProduct.id} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
+        // Fix for Collection Product ID logic for WA message
+        const productId = currentAgenda === 100 ? "1" : selectedProduct.id;
+
+        // Message format for Advisor
+        const message = `Hallo , Advisor saya telah memilih Agenda no ${agendaName} Paket No ${productId} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
       }
@@ -115,7 +138,8 @@ const App: React.FC = () => {
       setCurrentAgenda(currentAgenda + 1);
     }
 
-    // 3. Return to list view
+    // 3. Return to list view and reset state
+    setShowPayment(false);
     setSelectedProduct(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -141,14 +165,24 @@ const App: React.FC = () => {
 
       <main className="flex-grow max-w-4xl mx-auto px-4 md:px-8 pt-2 w-full relative">
         {selectedProduct ? (
-          /* PAGE 2: Confirmation View */
-          <div className="mt-8">
-            <ConfirmationPage 
-              product={selectedProduct} 
-              onBack={handleBack} 
-              onConfirm={handleConfirmOrder}
-            />
-          </div>
+          /* Check flow: Show Payment Page OR Confirmation Page */
+          showPayment ? (
+            <div className="mt-8">
+              <PaymentPage 
+                product={selectedProduct}
+                onBack={() => setShowPayment(false)}
+                onConfirmPayment={finalizeOrder}
+              />
+            </div>
+          ) : (
+            <div className="mt-8">
+              <ConfirmationPage 
+                product={selectedProduct} 
+                onBack={handleBack} 
+                onConfirm={handleConfirmOrder}
+              />
+            </div>
+          )
         ) : isCollectionsPage ? (
           /* SPECIAL PAGE: Collections View */
           <div className="mt-4">
