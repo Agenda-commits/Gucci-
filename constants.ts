@@ -128,15 +128,25 @@ export const GET_PRODUCTS = (agendaId: number): Product[] => {
   const imageOverrides = AGENDA_IMAGES[agendaId];
   const nameOverrides = AGENDA_NAMES[agendaId];
 
+  // Determine benefit multiplier based on Agenda
+  let benefitMultiplier = 1.2; // Default 20%
+  let benefitText = "20%";
+
+  if (agendaId === 4 || agendaId === 5) {
+    benefitMultiplier = 1.3; // 30% for Agenda 4 and 5
+    benefitText = "30%";
+  }
+
   return BASE_PRODUCTS.map((product, index) => {
     let newProduct = { ...product };
 
     // Apply Price Overrides
     if (prices && index < prices.length) {
       const price = prices[index];
-      const profit = price * 1.2;
+      const profit = price * benefitMultiplier;
       newProduct.price = formatIDR(price);
       newProduct.profit = formatIDR(profit);
+      newProduct.benefit = benefitText;
     }
 
     // Apply Image Overrides
