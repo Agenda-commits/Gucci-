@@ -48,8 +48,8 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
       <header className="bg-white sticky top-0 z-40">
         {/* Main Navbar */}
         <div className="flex items-center justify-between px-4 py-4 md:px-8 border-b border-gray-100 relative bg-white">
-          {/* Logo */}
-          <div className="text-3xl tracking-[0.2em] font-serif font-bold text-black cursor-pointer" onClick={() => handleAgendaClick(1, false)}>
+          {/* Logo - Static */}
+          <div className="text-3xl tracking-[0.2em] font-serif font-bold text-black">
             GUCCI
           </div>
 

@@ -30,6 +30,26 @@ const App: React.FC = () => {
   // Default to Agenda 1 on load
   const [currentAgenda, setCurrentAgenda] = useState<number>(1);
 
+  // Initialize currentAgenda based on progress on mount
+  useEffect(() => {
+    // Find the highest approved agenda number
+    let maxApproved = 0;
+    approvedAgendas.forEach(id => {
+      if (id > maxApproved && id < 100) maxApproved = id;
+    });
+
+    // If maxApproved is 0, stick to 1.
+    // If maxApproved is 1, go to 2.
+    // If maxApproved is 5, go to Collection (100).
+    if (maxApproved > 0) {
+      if (maxApproved >= 5) {
+         setCurrentAgenda(100);
+      } else {
+         setCurrentAgenda(maxApproved + 1);
+      }
+    }
+  }, []); // Empty dependency array ensures this runs only once on mount
+
   // Helper to check if an agenda is locked
   const isAgendaLocked = (agendaId: number) => {
     // Agenda 1 is always open
@@ -74,7 +94,7 @@ const App: React.FC = () => {
     if (selectedProduct) {
       if (currentAgenda === 1) {
         // Agenda 1 specific logic
-        const phoneNumber = "6281262260851";
+        const phoneNumber = "6281325808529";
         const message = `Halo Admin, saya telah memilih *PAKET 1*. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nHarga: ${selectedProduct.price}\nKeuntungan: ${selectedProduct.profit}`;
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
