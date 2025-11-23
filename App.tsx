@@ -100,7 +100,7 @@ const App: React.FC = () => {
         window.open(url, '_blank');
       } else {
         // Logic for Agenda 2, 3, 4, 5 and Collection (100)
-        const phoneNumber = "6281385616098";
+        const phoneNumber = "6282261676018";
         const agendaName = currentAgenda === 100 ? "COLLECTION" : `AGENDA ${currentAgenda}`;
         
         // New message format for Advisor
