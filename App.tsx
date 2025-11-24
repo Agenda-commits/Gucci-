@@ -155,6 +155,14 @@ const App: React.FC = () => {
   // Check if CURRENT agenda is approved to lock buttons
   const isApproved = approvedAgendas.includes(currentAgenda);
 
+  // Dynamic Subtitle Logic
+  const getSubtitle = () => {
+    if (currentAgenda === 4 || currentAgenda === 5) {
+      return "BENEFIT 30%";
+    }
+    return "BENEFIT 20%";
+  };
+
   return (
     <div className="min-h-screen bg-white font-sans text-black selection:bg-gray-200 flex flex-col">
       <Header 
@@ -217,8 +225,8 @@ const App: React.FC = () => {
               )}
 
               <div className="max-w-md mx-auto px-4">
-                <h2 className="text-[11px] font-bold uppercase tracking-widest mb-2 text-black">
-                  GUCCI BEAUTY GIFT SETS
+                <h2 className="text-xl font-bold uppercase tracking-widest mb-2 text-black">
+                  {getSubtitle()}
                 </h2>
                 <p className="text-xs md:text-sm font-medium leading-relaxed text-gray-900">
                   The House's curation includes fine fragrances for men and women, as well as designer beauty gift sets.
