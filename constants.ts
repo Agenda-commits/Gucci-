@@ -1,4 +1,5 @@
 
+
 import { Product } from './types';
 
 const BASE_PRODUCTS: Product[] = [
@@ -8,7 +9,7 @@ const BASE_PRODUCTS: Product[] = [
     price: "100.000",
     benefit: "20%",
     profit: "120.000",
-    imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw6p1bD37j1GqiU-E6ZzvByuGq1LcgaF54NQ&s", 
+    imageUrl: "https://i5.walmartimages.com/seo/134-Value-Gucci-Bloom-Perfume-Gift-set-for-Women-2-Pieces_de0ff14d-25ae-48f5-b80a-37344bfac5cc_1.49e8fd674186487a044104a0392ea8d3.jpeg", 
   },
   {
     id: 2,
@@ -52,61 +53,66 @@ const AGENDA_PRICES: Record<number, number[]> = {
 // Image Override Configuration map
 const AGENDA_IMAGES: Record<number, Record<number, string>> = {
   1: {
-    1: "https://i5.walmartimages.com/seo/134-Value-Gucci-Bloom-Perfume-Gift-set-for-Women-2-Pieces_de0ff14d-25ae-48f5-b80a-37344bfac5cc_1.49e8fd674186487a044104a0392ea8d3.jpeg",
-    3: "https://perfumeoasis.co.uk/cdn/shop/files/GSMAGMNEW.jpg?v=1751975757",
-    4: "https://www.perfumedirect.com/cdn/shop/files/gucci-women-s-perfume-gucci-guilty-pour-femme-eau-de-parfum-women-s-gift-set-spray-50ml-with-50ml-body-lotion-72784461922681_large.png"
+    1: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1758137467/860787_AAEE7_7702_001_100_0000_Light.jpg",
+    3: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1747845099/847090_FAEUC_9758_001_065_0000_Light.jpg",
+    4: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1758728705/857595_FAFUF_9870_001_085_0000_Light.jpg"
   },
   2: {
-    1: "https://media.gucci.com/style/DarkGray_Center_0_0_1200x1200/1758094278/825787_Z7AVP_5057_001_100_0000_Light-printed-georgette-long-pleated-dress.jpg",
-    2: "https://media.gucci.com/style/DarkGray_Center_0_0_1200x1200/1735343201/818349_Z8BYL_3441_001_100_0000_Light-mid-length-gg-cotton-gabardine-dress.jpg",
-    3: "https://media.gucci.com/style/DarkGray_Center_0_0_490x490/1758096040/827455_XDDCF_4492_001_100_0000_Light-gg-washed-denim-jacquard-shirt.jpg",
-    4: "https://cdna.lystit.com/520/650/n/photos/nugnes1920/564d7cf6/gucci--Rosso-Ancora-Technical-Gabardine-Jacket.jpeg"
+    1: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1744218003/497985_AAE5F_1642_001_100_0000_Light.jpg",
+    2: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1760979630/854267_ZAUG6_1082_001_100_0000_Light.jpg",
+    3: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1760372115/857362_AAF1I_1000_001_079_0000_Light.jpg",
+    4: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1757518254/860999_J0740_2126_001_100_0000_Light.jpg"
   },
   3: {
-    1: "https://cdna.lystit.com/1040/1300/n/photos/harrods/P000000000005048069-Gold-3ea424db-.jpeg",
+    1: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1761846303/857595_AAF09_1807_001_085_0000_Light.jpg",
     2: "https://media.gucci.com/style/DarkGray_Center_0_0_490x490/1740642315/771603_DKT00_7100_015_090_0000_Light-womens-mid-heel-sandal-with-horsebit.jpg",
-    3: "https://cdn1.jolicloset.com/img4/detail4b/2022/06/540203-1/heels-gucci.jpg",
-    4: "https://media.gucci.com/style/White_South_0_160_316x316/1712855737/783821_BNC80_2604_001_090_0000_Light-Gucci-Signoria-slingback-pump.jpg"
+    3: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1763660718/853080_ZAUCE_1016_001_100_0000_Light.jpg",
+    4: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1679914822/753233_IEFA0_9812_001_100_0000_Light.jpg"
   },
   4: {
-    1: "https://media.gucci.com/style/DarkGray_Center_0_0_980x980/1741024895/832014_JAAIR_8069_002_100_0000_Light-gucci-interlocking-18k-bangle-bracelet.jpg",
+    1: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1759771833/847384_FAE8G_8668_001_080_0031_Light.jpg",
     2: "https://www.berrysjewellers.co.uk/cdn/shop/files/gucci-gucci-interlocking-18ct-yellow-gold-black-onyx-ring-ybc786547001013-72728319492478.png?v=1747337011&width=800",
-    3: "https://media.gucci.com/style/DarkGray_Center_0_0_490x490/1720458043/745654_J8500_5702_001_100_0000_Light-gucci-link-to-love-18k-chain-necklace.jpg",
-    4: "https://media.neimanmarcus.com/f_auto,q_auto:low,ar_4:5,c_fill,dpr_2.0,w_790/01/nm_4518464_100602_m"
+    3: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1748536299/838483_FAE0P_9746_001_100_0000_Light.jpg",
+    4: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1759824907/546585_AAE5E_1069_001_100_0016_Light.jpg"
   },
   5: {
-    1: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrxoRnQqtRhMqX4_TtlL617f0LsuJqtTPHKg&s",
-    2: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdFZF50dsMasMPh_NmCQVtl6qHHgRdnB8xkw&s",
-    3: "https://jrdunn.com/cdn/shop/files/ya1264233_1.jpg?v=1753221015",
-    4: "https://media.gucci.com/style/DarkGray_Center_0_0_980x980/1745857947/834500_IEVA0_8591_001_100_0000_Light-gucci-dive-watch-36mm.jpg"
+    1: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1756916103/456126_EABGT_8645_001_080_0000_Light.jpg",
+    2: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1763649906/675800_FAFE6_6207_001_067_0031_Light.jpg",
+    3: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1618591505/658574_HUHHG_8565_001_077_0067_Light.jpg",
+    4: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1750264351/847281_FAE8F_5301_001_084_0000_Light.jpg"
   }
 };
 
 // Name Override Configuration map
 const AGENDA_NAMES: Record<number, Record<number, string>> = {
+  1: {
+    1: "Gucci Half Horsebit Medium Shoulder Bag",
+    3: "GG Emblem Nano Bucket Bag",
+    4: "Ophidia Medium Boston Bag"
+  },
   2: {
-    1: "Gucci Pink and red polyester georgette",
-    2: "Green GG cotton gabardine GUCCI",
-    3: "Blue and ivory washed GG denim jacquard",
-    4: "Gucci Rosso Ancora red gabardine nylon"
+    1: "GG MARMONT WALLET CHAIN",
+    2: "LARGE SHOULDER BAG WITH CHAIN",
+    3: "LARGE SHOULDER BAG WITH CHAIN",
+    4: "RECTANGULAR FRAME SUNGLASSES"
   },
   3: {
-    1: "Gucci Marmont Fringed Loafer Heel in Metallic Lyst Canada",
+    1: "Ophidia Medium Boston Bag",
     2: "Gucci Women's mid-heel sandal with Horsebit",
-    3: "Gucci Gold Leather Open Toe Pumps Heels with Horsebit Size 37 Golden",
-    4: "Women s Designer Luxury High Heels Pumps GUCCI Canada"
+    3: "GG Boutonne Wool Week Jacket",
+    4: "GUCCI 25H WATCH 30MM"
   },
   4: {
-    1: "18k yellow gold with amazonite stone",
+    1: "Floral Card Case With Double G",
     2: "18k yellow gold and black onyx stone",
-    3: "18k rose gold Geometric link chain GUCCI",
-    4: "18k rose gold Cut-out GG GUCCI"
+    3: "Ophidia Small Cosmetic Case",
+    4: "GG marmont Bi-color wallet on chain"
   },
   5: {
-    1: "Silver-toned dial with Interlocking G, Gucci logo, date at 3 o' clock",
-    2: "Gucci Interlocking watch, 29mm",
-    3: "G-Timeless watch, 38mm",
-    4: "Gucci Dive watch, 36mm"
+    1: "GG Marmont Python Small Wallet",
+    2: "Gucci Diana Crystals Small Tote Bag",
+    3: "Gucci Horsebit 1955 Small Shoulder Bag",
+    4: "GG Emblem Small Shoulder Bag"
   }
 };
 
