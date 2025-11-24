@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ShoppingBag, User, Menu, Plus, X, CheckCircle, Lock } from 'lucide-react';
 
@@ -36,25 +35,25 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
     window.open('https://www.gucci.com', '_blank');
   };
 
-  // Helper to check if an agenda is locked based on previous approval
   const isLocked = (id: number) => {
-    if (id === 1) return false; // Agenda 1 always open
-    if (id === 100) return !approvedAgendas.includes(1); // Collection unlocks after Agenda 1
+    if (id === 1) return false; 
+    if (id === 100) return !approvedAgendas.includes(1);
     return !approvedAgendas.includes(id - 1);
   };
 
   return (
     <>
       <header className="bg-white sticky top-0 z-40">
-        {/* Main Navbar */}
         <div className="flex items-center justify-between px-4 py-4 md:px-8 border-b border-gray-100 relative bg-white">
-          {/* Logo - Static */}
-          <div className="text-3xl tracking-[0.2em] font-serif font-bold text-black">
+          {/* Logo */}
+          <div 
+            className="text-3xl tracking-[0.2em] font-serif font-bold text-black cursor-default select-none"
+          >
             GUCCI
           </div>
 
           {/* Icons */}
-          <div className="flex items-center space-x-5 text-black">
+          <div className="flex items-center space-x-5 text-black relative">
             <ShoppingBag size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" onClick={handleShopClick} />
             <User size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" onClick={handleWebClick} />
             <button onClick={toggleMenu} className="focus:outline-none hover:opacity-70">
@@ -75,10 +74,9 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
         </div>
       </header>
 
-      {/* Full Screen Menu Overlay */}
+      {/* Full Screen Menu Overlay (Agenda) */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-white z-50 flex flex-col animate-fadeIn pt-24 px-8 overflow-y-auto">
-          {/* Close Button absolute positioned to match header layout */}
           <div className="absolute top-0 left-0 right-0 px-4 py-4 md:px-8 flex justify-end border-b border-transparent">
              <button onClick={toggleMenu} className="p-1 hover:opacity-70">
                <X size={24} strokeWidth={1.5} />
@@ -142,8 +140,11 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
 
       <style>{`
         @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
+          from { opacity: 0; transform: translateY(-5px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.2s ease-out forwards;
         }
       `}</style>
     </>
