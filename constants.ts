@@ -116,6 +116,16 @@ const AGENDA_NAMES: Record<number, Record<number, string>> = {
   }
 };
 
+// Recommended Items Configuration
+// Map of Agenda ID -> Array of Product IDs that are recommended
+const RECOMMENDED_ITEMS: Record<number, number[]> = {
+  1: [4], // Agenda 1 col 4
+  2: [4], // Agenda 2 col 4
+  3: [3], // Agenda 3 col 3
+  4: [3], // Agenda 4 col 3
+  5: [4]  // Agenda 5 col 4
+};
+
 // NEW: Collections Page Data (ID 100) - Weekend Special
 export const COLLECTION_PRODUCTS = [
   {
@@ -133,26 +143,49 @@ export const GET_PRODUCTS = (agendaId: number): Product[] => {
   const prices = AGENDA_PRICES[agendaId];
   const imageOverrides = AGENDA_IMAGES[agendaId];
   const nameOverrides = AGENDA_NAMES[agendaId];
+  const recommendedIds = RECOMMENDED_ITEMS[agendaId] || [];
 
-  // Determine benefit multiplier based on Agenda
-  let benefitMultiplier = 1.2; // Default 20%
-  let benefitText = "20%";
+  // Determine base benefit multiplier based on Agenda
+  let baseMultiplier = 1.2; // Default 20%
+  let baseText = "20%";
 
   if (agendaId === 4 || agendaId === 5) {
-    benefitMultiplier = 1.3; // 30% for Agenda 4 and 5
-    benefitText = "30%";
+    baseMultiplier = 1.3; // 30% for Agenda 4 and 5
+    baseText = "30%";
   }
 
   return BASE_PRODUCTS.map((product, index) => {
     let newProduct = { ...product };
 
-    // Apply Price Overrides
+    // Check if this specific product is recommended
+    const isRecommended = recommendedIds.includes(product.id);
+    
+    // Calculate final multiplier
+    // If recommended, force 30% (1.3). Else use base multiplier.
+    const multiplier = isRecommended ? 1.3 : baseMultiplier;
+    const benefitDisplay = isRecommended ? "30%" : baseText;
+
+    if (isRecommended) {
+      newProduct.isRecommended = true;
+    }
+
+    // Apply Price and Profit Calculations
     if (prices && index < prices.length) {
       const price = prices[index];
-      const profit = price * benefitMultiplier;
+      const profit = price * multiplier;
       newProduct.price = formatIDR(price);
       newProduct.profit = formatIDR(profit);
-      newProduct.benefit = benefitText;
+      newProduct.benefit = benefitDisplay;
+    } else {
+      // Fallback for products not in price map (Agenda 1 default logic needs handling)
+      // If using default string prices, we need to parse them to apply new benefit
+      if (agendaId === 1) {
+        // Parse "100.000" -> 100000
+        const numericPrice = parseInt(product.price.replace(/\./g, ''));
+        const profit = numericPrice * multiplier;
+        newProduct.profit = formatIDR(profit);
+        newProduct.benefit = benefitDisplay;
+      }
     }
 
     // Apply Image Overrides

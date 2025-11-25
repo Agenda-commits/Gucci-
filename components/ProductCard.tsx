@@ -1,6 +1,8 @@
 
+
 import React from 'react';
 import { Product } from '../types';
+import { Star } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
@@ -16,7 +18,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   isApproved = false 
 }) => {
   return (
-    <div className="flex flex-col w-full h-full justify-between">
+    <div className="flex flex-col w-full h-full justify-between relative">
       {/* Top Content Wrapper */}
       <div>
         {/* Image Container */}
@@ -25,6 +27,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="absolute top-4 left-4 w-8 h-8 bg-white rounded-full flex items-center justify-center text-sm font-bold shadow-sm z-10 font-sans text-black">
             {product.id}
           </div>
+
+          {/* Recommended Badge */}
+          {product.isRecommended && (
+            <div className="absolute top-0 right-0 z-20 bg-black text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1.5 shadow-md flex items-center gap-1">
+              <Star size={10} fill="white" />
+              Recommended
+            </div>
+          )}
 
           {/* Real Product Image */}
           <img 
@@ -51,7 +61,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           <span>Benefit</span>
           <span className="text-center">:</span>
-          <span>{product.benefit}</span>
+          <span className={product.isRecommended ? "text-green-700 font-bold" : ""}>{product.benefit}</span>
 
           <span>IDR profit</span>
           <span className="text-center">:</span>
@@ -66,10 +76,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         className={`w-full text-[10px] font-bold uppercase tracking-[0.2em] py-3 transition-colors duration-300 mt-auto ${
           isApproved 
             ? 'bg-gray-200 text-gray-400 cursor-not-allowed' 
-            : 'bg-black text-white hover:opacity-80'
+            : product.isRecommended 
+              ? 'bg-[#d4af37] text-black hover:bg-[#bfa030] hover:text-white' // Gold button for recommended
+              : 'bg-black text-white hover:opacity-80'
         }`}
       >
-        {isApproved ? 'Approved' : 'Pilih'}
+        {isApproved ? 'Approved' : product.isRecommended ? 'Pilih • Recommended' : 'Pilih'}
       </button>
     </div>
   );
