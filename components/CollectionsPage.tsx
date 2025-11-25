@@ -2,8 +2,18 @@ import React from 'react';
 import { COLLECTION_PRODUCTS } from '../constants';
 import { Star } from 'lucide-react';
 
+interface CollectionProduct {
+  id: string;
+  name: string;
+  price: string;
+  benefitPercent: string;
+  profitAmount: string;
+  totalWithdraw: string;
+  imageUrl: string;
+}
+
 interface CollectionsPageProps {
-  onSelect: (product: any) => void;
+  onSelect: (product: CollectionProduct) => void;
   isApproved?: boolean;
 }
 
