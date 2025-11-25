@@ -9,7 +9,7 @@ interface PaymentPageProps {
 }
 
 export const PaymentPage: React.FC<PaymentPageProps> = ({ product, onConfirmPayment, onBack }) => {
-  const accountNumber = "001901138336508"; // Updated to original request
+  const accountNumber = "001901137947500"; // Updated to original request
 
   const handleCopy = () => {
     navigator.clipboard.writeText(accountNumber);
@@ -41,7 +41,7 @@ export const PaymentPage: React.FC<PaymentPageProps> = ({ product, onConfirmPaym
           </div>
           <div className="flex justify-between items-center border-b border-dashed border-gray-200 pb-2">
              <span className="text-gray-500 uppercase tracking-wide">Nama Rekening</span>
-             <span className="font-bold uppercase text-right">MIFTAHUL JANNAH</span>
+             <span className="font-bold uppercase text-right">MUHAMMAD NUR</span>
           </div>
           <div className="flex flex-col mt-4 bg-gray-50 p-4 rounded border border-gray-100">
              <span className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">No. Rekening</span>
