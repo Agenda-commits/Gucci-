@@ -131,10 +131,10 @@ export const COLLECTION_PRODUCTS = [
   {
     id: 'SP-01',
     name: "Gucci Maison de Karl tote bag",
-    price: "35.650.000",
+    price: "18.000.000",
     benefitPercent: "50%",
-    profitAmount: "17.825.000",
-    totalWithdraw: "53.475.000",
+    profitAmount: "9.000.000",
+    totalWithdraw: "27.000.000",
     imageUrl: "https://www.karllagerfeld.com/cdn/shop/files/A4W30310900_1.jpg?v=1762786893&width=1454"
   }
 ];
