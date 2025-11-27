@@ -64,13 +64,14 @@ const App: React.FC = () => {
 
     // If maxApproved is 0, stick to 1.
     // If maxApproved is 1, go to 2.
-    // If maxApproved is 5, go to Collection (100) or Loop logic depending on reset.
+    // If maxApproved is 5, it means the previous loop finished but maybe didn't reset properly or user refreshed.
+    // In a strict loop, if 5 is approved, we should actually be at 1 (reset). 
+    // But if we just loaded, let's allow them to see what they have.
     if (maxApproved > 0) {
       if (maxApproved >= 5) {
-         // If 5 was done, usually go to 100.
-         // But per new requirement, if 5 is done, we might want to ensure they can loop.
-         // For now, on refresh, we stick to the standard logic: next available.
-         setCurrentAgenda(100);
+         // If 5 is done, we reset to 1 to start over
+         setCurrentAgenda(1);
+         // Optionally we could clear approvedAgendas here too if we want to force reset on reload
       } else {
          setCurrentAgenda(maxApproved + 1);
       }
@@ -155,19 +156,22 @@ const App: React.FC = () => {
 
     // STATE UPDATE LOGIC (Looping vs Progression)
     if (currentAgenda === 5) {
-      // LOOP LOGIC: If finishing Agenda 5, reset everything and go back to Agenda 1
-      setApprovedAgendas([]); // Clear history
-      setCurrentAgenda(1); // Go back to start
+      // LOOP LOGIC: 
+      // If finishing Agenda 5, we RESET everything.
+      // 1. Clear the approved history so green stamps disappear.
+      setApprovedAgendas([]); 
+      // 2. Redirect user back to Agenda 1 to start the cycle again.
+      setCurrentAgenda(1); 
     } else {
-      // STANDARD PROGRESSION
+      // STANDARD PROGRESSION (Agenda 1, 2, 3, 4)
+      
       // 1. Mark current agenda as approved if not already
       if (!approvedAgendas.includes(currentAgenda)) {
         const newApproved = [...approvedAgendas, currentAgenda];
         setApprovedAgendas(newApproved);
       }
 
-      // Auto-advance to next agenda if available (only for numbered agendas < 5)
-      // Note: We handled =5 above, so this is for 1-4
+      // 2. Auto-advance logic
       if (currentAgenda < 5) {
         setCurrentAgenda(currentAgenda + 1);
       }
