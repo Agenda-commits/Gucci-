@@ -1,5 +1,5 @@
+
 import React, { useState } from 'react';
-import { supabase } from '../supabaseClient';
 
 interface LoginPageProps {
   onLogin: (name: string, phone: string) => void;
@@ -12,7 +12,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!name || !phone || !password) {
@@ -23,36 +23,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     setIsLoading(true);
     setError('');
 
-    try {
-      // Mengirim data ke tabel 'users' di Supabase
-      // Pastikan Anda sudah membuat tabel 'users' dengan kolom: name (text), phone (text), password (text)
-      const { error: dbError } = await supabase
-        .from('users')
-        .insert([
-          { 
-            name: name, 
-            phone: phone, 
-            password: password,
-            created_at: new Date().toISOString()
-          }
-        ]);
-
-      if (dbError) {
-        console.error("Supabase Error:", dbError);
-        // Kita tetap lanjut login meskipun gagal save ke DB (opsional, agar user tidak stuck)
-        // Atau bisa tampilkan error: setError('Terjadi kesalahan koneksi');
-      }
-
-      // Lanjutkan ke aplikasi utama
-      onLogin(name, phone);
-      
-    } catch (err) {
-      console.error("Unexpected Error:", err);
-      // Fallback login jika terjadi error sistem
-      onLogin(name, phone);
-    } finally {
+    // Simulate network delay for effect
+    setTimeout(() => {
       setIsLoading(false);
-    }
+      onLogin(name, phone);
+    }, 1000);
   };
 
   return (
