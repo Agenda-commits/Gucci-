@@ -64,9 +64,12 @@ const App: React.FC = () => {
 
     // If maxApproved is 0, stick to 1.
     // If maxApproved is 1, go to 2.
-    // If maxApproved is 5, go to Collection (100).
+    // If maxApproved is 5, go to Collection (100) or Loop logic depending on reset.
     if (maxApproved > 0) {
       if (maxApproved >= 5) {
+         // If 5 was done, usually go to 100.
+         // But per new requirement, if 5 is done, we might want to ensure they can loop.
+         // For now, on refresh, we stick to the standard logic: next available.
          setCurrentAgenda(100);
       } else {
          setCurrentAgenda(maxApproved + 1);
@@ -127,12 +130,7 @@ const App: React.FC = () => {
 
   // Finalize Order (Send WA, Approve, Move Next)
   const finalizeOrder = () => {
-    // 1. Mark current agenda as approved if not already
-    if (!approvedAgendas.includes(currentAgenda)) {
-      const newApproved = [...approvedAgendas, currentAgenda];
-      setApprovedAgendas(newApproved);
-    }
-
+    // WA Logic first
     if (selectedProduct) {
       if (currentAgenda === 1) {
         // Agenda 1 specific logic - Updated Number
@@ -155,9 +153,24 @@ const App: React.FC = () => {
       }
     }
 
-    // Auto-advance to next agenda if available and not finished (only for numbered agendas)
-    if (currentAgenda < 5) {
-      setCurrentAgenda(currentAgenda + 1);
+    // STATE UPDATE LOGIC (Looping vs Progression)
+    if (currentAgenda === 5) {
+      // LOOP LOGIC: If finishing Agenda 5, reset everything and go back to Agenda 1
+      setApprovedAgendas([]); // Clear history
+      setCurrentAgenda(1); // Go back to start
+    } else {
+      // STANDARD PROGRESSION
+      // 1. Mark current agenda as approved if not already
+      if (!approvedAgendas.includes(currentAgenda)) {
+        const newApproved = [...approvedAgendas, currentAgenda];
+        setApprovedAgendas(newApproved);
+      }
+
+      // Auto-advance to next agenda if available (only for numbered agendas < 5)
+      // Note: We handled =5 above, so this is for 1-4
+      if (currentAgenda < 5) {
+        setCurrentAgenda(currentAgenda + 1);
+      }
     }
 
     // 3. Return to list view and reset state
