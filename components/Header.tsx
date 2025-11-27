@@ -1,13 +1,15 @@
+
 import React, { useState } from 'react';
-import { ShoppingBag, User, Menu, Plus, X, CheckCircle, Lock } from 'lucide-react';
+import { ShoppingBag, User, Menu, Plus, X, CheckCircle, Lock, Clock } from 'lucide-react';
 
 interface HeaderProps {
   currentAgenda: number;
   onSelectAgenda: (id: number) => void;
   approvedAgendas: number[];
+  unlockTimes: Record<number, number>;
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, approvedAgendas = [] }) => {
+export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, approvedAgendas = [], unlockTimes = {} }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -35,10 +37,32 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
     window.open('https://www.gucci.com', '_blank');
   };
 
+  // Helper to format time remaining
+  const getTimeRemaining = (id: number) => {
+    if (!unlockTimes[id]) return null;
+    const diff = unlockTimes[id] - Date.now();
+    if (diff <= 0) return null;
+
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
   const isLocked = (id: number) => {
     if (id === 1) return false; 
+    
+    // Time Lock Check
+    if (unlockTimes[id] && Date.now() < unlockTimes[id]) {
+      return true;
+    }
+
     if (id === 100) return !approvedAgendas.includes(1);
     return !approvedAgendas.includes(id - 1);
+  };
+
+  // Special check just for time lock to show different icon
+  const isTimeLocked = (id: number) => {
+    return unlockTimes[id] && Date.now() < unlockTimes[id];
   };
 
   return (
@@ -88,6 +112,7 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
             {[1, 2, 3, 4, 5].map((num) => {
               const locked = isLocked(num);
               const approved = approvedAgendas.includes(num);
+              const timeRemaining = getTimeRemaining(num);
               
               return (
                 <button
@@ -103,7 +128,14 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
                     AGENDA {num}
                   </span>
                   
-                  {locked && <Lock size={16} className="text-gray-300" />}
+                  {locked && !timeRemaining && <Lock size={16} className="text-gray-300" />}
+                  
+                  {timeRemaining && (
+                    <div className="flex items-center gap-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-mono">
+                      <Clock size={12} />
+                      {timeRemaining}
+                    </div>
+                  )}
                   
                   {!locked && approved && (
                     <div className="flex items-center bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide">
@@ -126,7 +158,15 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
               }`}
             >
               Collections
-              {isLocked(100) && <Lock size={12} />}
+              {isLocked(100) && !getTimeRemaining(100) && <Lock size={12} />}
+              
+              {getTimeRemaining(100) && (
+                <div className="flex items-center gap-1 bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-xs font-mono ml-2">
+                  <Clock size={12} />
+                  {getTimeRemaining(100)}
+                </div>
+              )}
+
               {!isLocked(100) && approvedAgendas.includes(100) && (
                 <div className="flex items-center bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ml-2">
                   <CheckCircle size={12} className="mr-1" />

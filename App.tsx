@@ -46,10 +46,33 @@ const App: React.FC = () => {
     }
   });
 
-  // Save to localStorage whenever approvedAgendas changes
+  // UNLOCK TIMERS STATE (Map of Agenda ID -> Timestamp when it unlocks)
+  const [unlockTimes, setUnlockTimes] = useState<Record<number, number>>(() => {
+    try {
+      const saved = localStorage.getItem('gucci_unlock_times');
+      return saved ? JSON.parse(saved) : {};
+    } catch (error) {
+      return {};
+    }
+  });
+
+  // Force re-render every second to update countdowns
+  const [tick, setTick] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTick(t => t + 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Save to localStorage
   useEffect(() => {
     localStorage.setItem('gucci_approved_agendas', JSON.stringify(approvedAgendas));
   }, [approvedAgendas]);
+
+  useEffect(() => {
+    localStorage.setItem('gucci_unlock_times', JSON.stringify(unlockTimes));
+  }, [unlockTimes]);
 
   // Default to Agenda 1 on load
   const [currentAgenda, setCurrentAgenda] = useState<number>(1);
@@ -62,26 +85,28 @@ const App: React.FC = () => {
       if (id > maxApproved && id < 100) maxApproved = id;
     });
 
-    // If maxApproved is 0, stick to 1.
-    // If maxApproved is 1, go to 2.
-    // If maxApproved is 5, it means the previous loop finished but maybe didn't reset properly or user refreshed.
-    // In a strict loop, if 5 is approved, we should actually be at 1 (reset). 
-    // But if we just loaded, let's allow them to see what they have.
     if (maxApproved > 0) {
       if (maxApproved >= 5) {
-         // If 5 is done, we reset to 1 to start over
          setCurrentAgenda(1);
-         // Optionally we could clear approvedAgendas here too if we want to force reset on reload
       } else {
          setCurrentAgenda(maxApproved + 1);
       }
     }
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []); 
 
   // Helper to check if an agenda is locked
   const isAgendaLocked = (agendaId: number) => {
     // Agenda 1 is always open
     if (agendaId === 1) return false;
+
+    // Check Time Lock first
+    if (unlockTimes[agendaId]) {
+      const now = Date.now();
+      if (now < unlockTimes[agendaId]) {
+        return true; // Still waiting for timer
+      }
+    }
+
     // Collections (100) is open only if Agenda 1 is approved
     if (agendaId === 100) return !approvedAgendas.includes(1);
     
@@ -92,7 +117,12 @@ const App: React.FC = () => {
   // Handle Agenda Selection from Header Menu
   const handleAgendaSelect = (agendaId: number) => {
     if (isAgendaLocked(agendaId)) {
-      alert("Please complete the previous Agenda to unlock this one.");
+      // Check if it's locked due to time
+      if (unlockTimes[agendaId] && Date.now() < unlockTimes[agendaId]) {
+        alert("Agenda ini sedang diproses. Harap tunggu hingga waktu hitung mundur selesai.");
+      } else {
+        alert("Please complete the previous Agenda to unlock this one.");
+      }
       return;
     }
     setCurrentAgenda(agendaId);
@@ -135,7 +165,7 @@ const App: React.FC = () => {
     if (selectedProduct) {
       if (currentAgenda === 1) {
         // Agenda 1 specific logic - Updated Number
-        const phoneNumber = "6281374192171";
+        const phoneNumber = "6281325808529";
         const message = `Halo Admin, saya telah memilih Agenda no 1 Paket No ${selectedProduct.id} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
@@ -143,11 +173,7 @@ const App: React.FC = () => {
         // Logic for Agenda 2, 3, 4, 5 and Collection (100)
         const phoneNumber = "6281385616098";
         const agendaName = currentAgenda === 100 ? "COLLECTION" : `${currentAgenda}`;
-        
-        // Fix for Collection Product ID logic for WA message
         const productId = currentAgenda === 100 ? "1" : selectedProduct.id;
-
-        // Message format for Advisor
         const message = `Hallo , Advisor saya telah memilih Agenda no ${agendaName} Paket No ${productId} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
@@ -157,24 +183,42 @@ const App: React.FC = () => {
     // STATE UPDATE LOGIC (Looping vs Progression)
     if (currentAgenda === 5) {
       // LOOP LOGIC: 
-      // If finishing Agenda 5, we RESET everything.
-      // 1. Clear the approved history so green stamps disappear.
+      // Reset everything to start over
       setApprovedAgendas([]); 
-      // 2. Redirect user back to Agenda 1 to start the cycle again.
+      setUnlockTimes({}); // Reset timers
       setCurrentAgenda(1); 
     } else {
-      // STANDARD PROGRESSION (Agenda 1, 2, 3, 4)
+      // STANDARD PROGRESSION (Agenda 1 -> 2 -> 3 -> 4 -> 5)
       
-      // 1. Mark current agenda as approved if not already
+      // 1. Mark current agenda as approved
       if (!approvedAgendas.includes(currentAgenda)) {
         const newApproved = [...approvedAgendas, currentAgenda];
         setApprovedAgendas(newApproved);
       }
 
-      // 2. Auto-advance logic
-      if (currentAgenda < 5) {
-        setCurrentAgenda(currentAgenda + 1);
+      // 2. Set 5-Minute Timer for the NEXT Agenda
+      const nextAgendaId = currentAgenda + 1;
+      const unlockTimestamp = Date.now() + (5 * 60 * 1000); // 5 minutes from now
+      
+      const newUnlockTimes = { ...unlockTimes };
+      
+      // Lock Next Agenda
+      if (nextAgendaId <= 5) {
+        newUnlockTimes[nextAgendaId] = unlockTimestamp;
       }
+
+      // Special case: If Agenda 1 finished, also lock Collection (100) for 5 mins if we want strict timing
+      // Or we follow the request "kunci di agenda berikutnya". 
+      // Let's ensure Collection also waits if it unlocks after Agenda 1.
+      if (currentAgenda === 1) {
+        newUnlockTimes[100] = unlockTimestamp;
+      }
+      
+      setUnlockTimes(newUnlockTimes);
+
+      // 3. DO NOT auto-advance immediately if there is a timer. 
+      // Return to list view. User has to wait.
+      // But we can go back to list view of CURRENT agenda (which is now approved).
     }
 
     // 3. Return to list view and reset state
@@ -186,9 +230,8 @@ const App: React.FC = () => {
   // Get products based on current Agenda (only needed for 1-5)
   const currentProducts = GET_PRODUCTS(currentAgenda);
 
-  // Determine if products should be displayed as full cards (cover) or contained (PNG style)
-  // Agenda 1 uses full background JPGs
-  const isFullCard = currentAgenda === 1;
+  // Determine if products should be displayed as full cards
+  const isFullCard = currentAgenda === 1 || currentAgenda === 6; // Keep 6 for safety, though removed
   const isCollectionsPage = currentAgenda === 100;
   
   // Check if CURRENT agenda is approved to lock buttons
@@ -213,6 +256,7 @@ const App: React.FC = () => {
         currentAgenda={currentAgenda} 
         onSelectAgenda={handleAgendaSelect} 
         approvedAgendas={approvedAgendas}
+        unlockTimes={unlockTimes}
       />
 
       <main className="flex-grow max-w-4xl mx-auto px-4 md:px-8 pt-2 w-full relative">
@@ -296,7 +340,6 @@ const App: React.FC = () => {
 
       <Footer />
       
-      {/* Simple animation style */}
       <style>{`
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
