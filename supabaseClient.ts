@@ -1,9 +1,24 @@
-
 import { createClient } from '@supabase/supabase-js';
 
-// Placeholder URL yang valid secara format untuk mencegah error "Invalid URL" saat inisialisasi.
-// Ganti string ini dengan Project URL & Anon Key asli dari Dashboard Supabase Anda agar fitur simpan data berfungsi.
+// Gunakan URL placeholder yang valid secara sintaksis untuk mencegah error "Invalid URL" saat startup.
+// Ganti nilai ini dengan URL & Key asli dari Project Supabase Anda.
 const supabaseUrl = 'https://placeholder.supabase.co'; 
 const supabaseKey = 'placeholder-key';
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+let client;
+
+try {
+  // Mencoba menginisialisasi client
+  client = createClient(supabaseUrl, supabaseKey);
+} catch (error) {
+  console.warn('Supabase client failed to initialize, using fallback mode:', error);
+  // Fallback: Mock object agar aplikasi tidak crash (White Screen)
+  client = {
+    from: () => ({
+      insert: async () => ({ error: { message: 'Supabase not configured correctly.' } }),
+      select: async () => ({ error: { message: 'Supabase not configured correctly.' } }),
+    }),
+  } as any;
+}
+
+export const supabase = client;
