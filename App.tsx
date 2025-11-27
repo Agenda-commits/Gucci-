@@ -9,8 +9,11 @@ import { LoginPage } from './components/LoginPage';
 import { Footer } from './components/Footer';
 import { GET_PRODUCTS } from './constants';
 import { Product } from './types';
+import { LanguageProvider, useLanguage } from './LanguageContext';
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
+  const { t } = useLanguage();
+  
   // --- AUTHENTICATION STATE ---
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState<{name: string, phone: string} | null>(null);
@@ -208,17 +211,11 @@ const App: React.FC = () => {
       }
 
       // Special case: If Agenda 1 finished, also lock Collection (100) for 5 mins if we want strict timing
-      // Or we follow the request "kunci di agenda berikutnya". 
-      // Let's ensure Collection also waits if it unlocks after Agenda 1.
       if (currentAgenda === 1) {
         newUnlockTimes[100] = unlockTimestamp;
       }
       
       setUnlockTimes(newUnlockTimes);
-
-      // 3. DO NOT auto-advance immediately if there is a timer. 
-      // Return to list view. User has to wait.
-      // But we can go back to list view of CURRENT agenda (which is now approved).
     }
 
     // 3. Return to list view and reset state
@@ -231,7 +228,7 @@ const App: React.FC = () => {
   const currentProducts = GET_PRODUCTS(currentAgenda);
 
   // Determine if products should be displayed as full cards
-  const isFullCard = currentAgenda === 1 || currentAgenda === 6; // Keep 6 for safety, though removed
+  const isFullCard = currentAgenda === 1 || currentAgenda === 6; 
   const isCollectionsPage = currentAgenda === 100;
   
   // Check if CURRENT agenda is approved to lock buttons
@@ -240,9 +237,9 @@ const App: React.FC = () => {
   // Dynamic Subtitle Logic
   const getSubtitle = () => {
     if (currentAgenda === 4 || currentAgenda === 5) {
-      return "BENEFIT 30%";
+      return `${t('benefit')} 30%`;
     }
-    return "BENEFIT 20%";
+    return `${t('benefit')} 20%`;
   };
 
   // --- CONDITIONAL RENDER: LOGIN ---
@@ -302,13 +299,13 @@ const App: React.FC = () => {
             {/* Hero Title */}
             <div className="text-center mb-8 mt-4 animate-fadeIn relative">
               <h1 className="text-2xl font-bold font-serif tracking-widest mb-6 uppercase">
-                AGENDA {currentAgenda}
+                {t('agenda')} {currentAgenda}
               </h1>
               
               {/* Approved Stamp on Main Page */}
               {isApproved && (
                 <div className="absolute top-0 right-0 md:right-20 rotate-12 border-4 border-green-600 text-green-600 px-4 py-1 text-sm font-bold uppercase tracking-widest opacity-80 pointer-events-none">
-                  APPROVED
+                  {t('approved')}
                 </div>
               )}
 
@@ -350,6 +347,14 @@ const App: React.FC = () => {
         }
       `}</style>
     </div>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 };
 

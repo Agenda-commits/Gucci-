@@ -1,8 +1,8 @@
 
-
 import React from 'react';
 import { Product } from '../types';
 import { Star } from 'lucide-react';
+import { useLanguage } from '../LanguageContext';
 
 interface ProductCardProps {
   product: Product;
@@ -17,6 +17,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   isFullCard = false, 
   isApproved = false 
 }) => {
+  const { t } = useLanguage();
+
   return (
     <div className="flex flex-col w-full h-full justify-between relative">
       {/* Top Content Wrapper */}
@@ -32,7 +34,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {product.isRecommended && (
             <div className="absolute top-0 right-0 z-20 bg-black text-white text-[9px] font-bold uppercase tracking-widest px-2 py-1.5 shadow-md flex items-center gap-1">
               <Star size={10} fill="white" />
-              Recommended
+              {t('recommended')}
             </div>
           )}
 
@@ -55,15 +57,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Product Details Table */}
         <div className="grid grid-cols-[auto_12px_1fr] gap-y-0.5 text-[11px] font-medium text-black leading-loose mb-5">
-          <span>IDR price</span>
+          <span>IDR {t('price')}</span>
           <span className="text-center">:</span>
           <span>{product.price}</span>
 
-          <span>Benefit</span>
+          <span>{t('benefit')}</span>
           <span className="text-center">:</span>
           <span className={product.isRecommended ? "text-green-700 font-bold" : ""}>{product.benefit}</span>
 
-          <span>IDR profit</span>
+          <span>IDR {t('profit')}</span>
           <span className="text-center">:</span>
           <span>{product.profit}</span>
         </div>
@@ -81,7 +83,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               : 'bg-black text-white hover:opacity-80'
         }`}
       >
-        {isApproved ? 'Approved' : product.isRecommended ? 'Pilih • Recommended' : 'Pilih'}
+        {isApproved ? t('approved') : product.isRecommended ? `${t('select')} • ${t('recommended')}` : t('select')}
       </button>
     </div>
   );

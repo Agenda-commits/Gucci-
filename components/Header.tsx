@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
-import { ShoppingBag, User, Menu, Plus, X, CheckCircle, Lock } from 'lucide-react';
+import { ShoppingBag, User, Menu, Plus, X, CheckCircle, Lock, Globe } from 'lucide-react';
+import { useLanguage, LANGUAGES, LanguageCode } from '../LanguageContext';
 
 interface HeaderProps {
   currentAgenda: number;
@@ -10,7 +11,9 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, approvedAgendas = [], unlockTimes = {} }) => {
+  const { t, language, setLanguage } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -36,16 +39,9 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
   const handleShopClick = () => {
     window.open('https://www.gucci.com', '_blank');
   };
-
-  // Helper to format time remaining (Logic kept for internal checks if needed, but not rendered)
-  const getTimeRemaining = (id: number) => {
-    if (!unlockTimes[id]) return null;
-    const diff = unlockTimes[id] - Date.now();
-    if (diff <= 0) return null;
-
-    const minutes = Math.floor(diff / 60000);
-    const seconds = Math.floor((diff % 60000) / 1000);
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  
+  const handleLogoClick = () => {
+    onSelectAgenda(1);
   };
 
   const isLocked = (id: number) => {
@@ -66,13 +62,44 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
         <div className="flex items-center justify-between px-4 py-4 md:px-8 border-b border-gray-100 relative bg-white">
           {/* Logo */}
           <div 
-            className="text-3xl tracking-[0.2em] font-serif font-bold text-black cursor-default select-none"
+            onClick={handleLogoClick}
+            className="text-3xl tracking-[0.2em] font-serif font-bold text-black cursor-pointer select-none"
           >
             GUCCI
           </div>
 
           {/* Icons */}
           <div className="flex items-center space-x-5 text-black relative">
+             {/* Language Selector */}
+            <div className="relative">
+              <div 
+                className="flex items-center gap-1 cursor-pointer hover:opacity-70 transition-opacity"
+                onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
+              >
+                <Globe size={20} strokeWidth={1.5} />
+                <span className="text-xs font-bold uppercase">{language.toUpperCase()}</span>
+              </div>
+              
+              {/* Custom Language Dropdown */}
+              {isLangMenuOpen && (
+                <div className="absolute top-8 right-0 bg-white border border-gray-100 shadow-xl py-2 w-48 z-50 animate-fadeIn rounded-sm">
+                  {LANGUAGES.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setLanguage(lang.code);
+                        setIsLangMenuOpen(false);
+                      }}
+                      className={`w-full text-left px-4 py-2 text-xs font-medium hover:bg-gray-50 uppercase tracking-wide flex justify-between ${language === lang.code ? 'font-bold bg-gray-50' : 'text-gray-600'}`}
+                    >
+                      {lang.name}
+                      {language === lang.code && <CheckCircle size={12} className="text-black" />}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <ShoppingBag size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" onClick={handleShopClick} />
             <User size={20} strokeWidth={1.5} className="cursor-pointer hover:opacity-70" onClick={handleWebClick} />
             <button onClick={toggleMenu} className="focus:outline-none hover:opacity-70">
@@ -88,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
             className="flex items-center text-[10px] font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity"
           >
             <Plus size={10} className="mr-1" strokeWidth={3} />
-            Contact Us
+            {t('contact_us')}
           </button>
         </div>
       </header>
@@ -103,7 +130,7 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
           </div>
 
           <div className="flex flex-col items-center space-y-6 pb-12">
-            <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">Select Agenda</h2>
+            <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">{t('select')} {t('agenda')}</h2>
             {[1, 2, 3, 4, 5].map((num) => {
               const locked = isLocked(num);
               const approved = approvedAgendas.includes(num);
@@ -119,17 +146,15 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
                   }`}
                 >
                   <span className={currentAgenda === num ? 'border-b-2 border-black pb-1' : ''}>
-                    AGENDA {num}
+                    {t('agenda')} {num}
                   </span>
                   
                   {locked && <Lock size={16} className="text-gray-300" />}
                   
-                  {/* Timer Display Removed for Secrecy */}
-                  
                   {!locked && approved && (
                     <div className="flex items-center bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide">
                       <CheckCircle size={12} className="mr-1" />
-                      Approved
+                      {t('approved')}
                     </div>
                   )}
                 </button>
@@ -149,12 +174,10 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
               Collections
               {isLocked(100) && <Lock size={12} />}
               
-              {/* Collection Timer Removed for Secrecy */}
-
               {!isLocked(100) && approvedAgendas.includes(100) && (
                 <div className="flex items-center bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ml-2">
                   <CheckCircle size={12} className="mr-1" />
-                  Approved
+                  {t('approved')}
                 </div>
               )}
             </button>
