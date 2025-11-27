@@ -5,11 +5,33 @@ import { ProductCard } from './components/ProductCard';
 import { CollectionsPage } from './components/CollectionsPage';
 import { ConfirmationPage } from './components/ConfirmationPage';
 import { PaymentPage } from './components/PaymentPage';
+import { LoginPage } from './components/LoginPage';
 import { Footer } from './components/Footer';
 import { GET_PRODUCTS } from './constants';
 import { Product } from './types';
 
 const App: React.FC = () => {
+  // --- AUTHENTICATION STATE ---
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState<{name: string, phone: string} | null>(null);
+
+  useEffect(() => {
+    // Check local storage for existing login session
+    const storedUser = localStorage.getItem('gucci_user_session');
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser));
+      setIsLoggedIn(true);
+    }
+  }, []);
+
+  const handleLogin = (name: string, phone: string) => {
+    const user = { name, phone };
+    localStorage.setItem('gucci_user_session', JSON.stringify(user));
+    setUserData(user);
+    setIsLoggedIn(true);
+  };
+
+  // --- APP LOGIC ---
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showPayment, setShowPayment] = useState(false);
   
@@ -114,13 +136,13 @@ const App: React.FC = () => {
     if (selectedProduct) {
       if (currentAgenda === 1) {
         // Agenda 1 specific logic - Updated Number
-        const phoneNumber = "6281374192171";
+        const phoneNumber = "6281325808529";
         const message = `Halo Admin, saya telah memilih Agenda no 1 Paket No ${selectedProduct.id} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
       } else {
         // Logic for Agenda 2, 3, 4, 5 and Collection (100)
-        const phoneNumber = "6282261676018";
+        const phoneNumber = "6281385616098";
         const agendaName = currentAgenda === 100 ? "COLLECTION" : `${currentAgenda}`;
         
         // Fix for Collection Product ID logic for WA message
@@ -162,6 +184,11 @@ const App: React.FC = () => {
     }
     return "BENEFIT 20%";
   };
+
+  // --- CONDITIONAL RENDER: LOGIN ---
+  if (!isLoggedIn) {
+    return <LoginPage onLogin={handleLogin} />;
+  }
 
   return (
     <div className="min-h-screen bg-white font-sans text-black selection:bg-gray-200 flex flex-col">
