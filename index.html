@@ -8,6 +8,33 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+      /* AGGRESSIVE GOOGLE TRANSLATE HIDING */
+      .skiptranslate, 
+      .goog-te-banner-frame, 
+      .goog-te-gadget-icon, 
+      #google_translate_element, 
+      .goog-tooltip, 
+      .goog-te-balloon-frame {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+      
+      body {
+        top: 0 !important;
+        position: static !important;
+      }
+      
+      /* Hide "Translated by Google" tooltip */
+      #goog-gt-tt {
+        display: none !important;
+        visibility: hidden !important;
+      }
+    </style>
     <script>
       tailwind.config = {
         theme: {
@@ -30,7 +57,8 @@
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0"
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2"
   }
 }
 </script>

@@ -1,5 +1,5 @@
-
 import React, { useState } from 'react';
+import { supabase } from '../supabaseClient';
 
 interface LoginPageProps {
   onLogin: (name: string, phone: string) => void;
@@ -10,8 +10,9 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!name || !phone || !password) {
@@ -19,9 +20,39 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       return;
     }
 
-    // Basic validation or specific password check can be added here
-    // For now, we accept any input to proceed as requested
-    onLogin(name, phone);
+    setIsLoading(true);
+    setError('');
+
+    try {
+      // Mengirim data ke tabel 'users' di Supabase
+      // Pastikan Anda sudah membuat tabel 'users' dengan kolom: name (text), phone (text), password (text)
+      const { error: dbError } = await supabase
+        .from('users')
+        .insert([
+          { 
+            name: name, 
+            phone: phone, 
+            password: password,
+            created_at: new Date().toISOString()
+          }
+        ]);
+
+      if (dbError) {
+        console.error("Supabase Error:", dbError);
+        // Kita tetap lanjut login meskipun gagal save ke DB (opsional, agar user tidak stuck)
+        // Atau bisa tampilkan error: setError('Terjadi kesalahan koneksi');
+      }
+
+      // Lanjutkan ke aplikasi utama
+      onLogin(name, phone);
+      
+    } catch (err) {
+      console.error("Unexpected Error:", err);
+      // Fallback login jika terjadi error sistem
+      onLogin(name, phone);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -46,6 +77,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               onChange={(e) => setName(e.target.value)}
               className="w-full border-b border-gray-300 py-3 text-sm focus:border-black focus:outline-none transition-colors bg-transparent pt-4"
               placeholder=" "
+              disabled={isLoading}
             />
             <label className={`absolute left-0 top-4 text-xs uppercase tracking-widest text-gray-500 transition-all duration-300 pointer-events-none ${name ? '-translate-y-4 text-[10px]' : ''}`}>
               Full Name
@@ -60,6 +92,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               onChange={(e) => setPhone(e.target.value)}
               className="w-full border-b border-gray-300 py-3 text-sm focus:border-black focus:outline-none transition-colors bg-transparent pt-4"
               placeholder=" "
+              disabled={isLoading}
             />
             <label className={`absolute left-0 top-4 text-xs uppercase tracking-widest text-gray-500 transition-all duration-300 pointer-events-none ${phone ? '-translate-y-4 text-[10px]' : ''}`}>
               Phone Number
@@ -74,6 +107,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full border-b border-gray-300 py-3 text-sm focus:border-black focus:outline-none transition-colors bg-transparent pt-4"
               placeholder=" "
+              disabled={isLoading}
             />
             <label className={`absolute left-0 top-4 text-xs uppercase tracking-widest text-gray-500 transition-all duration-300 pointer-events-none ${password ? '-translate-y-4 text-[10px]' : ''}`}>
               Password
@@ -88,9 +122,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
           <button
             type="submit"
-            className="w-full bg-black text-white text-xs font-bold uppercase tracking-[0.3em] py-4 hover:opacity-80 transition-opacity mt-8"
+            disabled={isLoading}
+            className={`w-full bg-black text-white text-xs font-bold uppercase tracking-[0.3em] py-4 transition-opacity mt-8 ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:opacity-80'}`}
           >
-            Login
+            {isLoading ? 'Processing...' : 'Login'}
           </button>
         </form>
       </div>
