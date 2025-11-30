@@ -56,7 +56,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: 'Memproses...',
     enter_world: 'MASUKKAN DUNIA GUCCI',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'Harap isi semua kolom'
+    fill_fields: 'Harap isi semua kolom',
   },
   en: {
     agenda: 'AGENDA',
@@ -95,7 +95,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: 'Processing...',
     enter_world: 'ENTER THE WORLD OF GUCCI',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'Please fill in all fields'
+    fill_fields: 'Please fill in all fields',
   },
   zh: {
     agenda: '议程',
@@ -134,7 +134,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: '处理中...',
     enter_world: '进入 GUCCI 世界',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: '请填写所有字段'
+    fill_fields: '请填写所有字段',
   },
   es: {
     agenda: 'AGENDA',
@@ -173,7 +173,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: 'Procesando...',
     enter_world: 'ENTRAR AL MUNDO DE GUCCI',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'Por favor complete todos los campos'
+    fill_fields: 'Por favor complete todos los campos',
   },
   hi: {
     agenda: 'एजेंडा',
@@ -212,7 +212,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: 'प्रक्रिया जारी है...',
     enter_world: 'GUCCI की दुनिया में प्रवेश करें',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'कृपया सभी फ़ील्ड भरें'
+    fill_fields: 'कृपया सभी फ़ील्ड भरें',
   },
   ar: {
     agenda: 'جدول أعمال',
@@ -251,7 +251,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: 'جارٍ المعالجة...',
     enter_world: 'أدخل عالم غوتشي',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'يرجى ملء جميع الحقول'
+    fill_fields: 'يرجى ملء جميع الحقول',
   },
   fr: {
     agenda: 'AGENDA',
@@ -290,7 +290,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: 'Traitement...',
     enter_world: 'ENTREZ DANS LE MONDE DE GUCCI',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'Veuillez remplir tous les champs'
+    fill_fields: 'Veuillez remplir tous les champs',
   },
   de: {
     agenda: 'AGENDA',
@@ -329,7 +329,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: 'Verarbeitung...',
     enter_world: 'BETRETEN SIE DIE WELT VON GUCCI',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'Bitte füllen Sie alle Felder aus'
+    fill_fields: 'Bitte füllen Sie alle Felder aus',
   },
   ja: {
     agenda: 'アジェンダ',
@@ -368,7 +368,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: '処理中...',
     enter_world: 'GUCCIの世界へ',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'すべての項目に入力してください'
+    fill_fields: 'すべての項目に入力してください',
   },
   ko: {
     agenda: '의제',
@@ -407,7 +407,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: '처리 중...',
     enter_world: 'GUCCI의 세계로 입장',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: '모든 필드를 채워주세요'
+    fill_fields: '모든 필드를 채워주세요',
   }
 };
 

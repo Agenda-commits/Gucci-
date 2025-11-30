@@ -119,8 +119,8 @@ const AppContent: React.FC = () => {
 
   // Handle Agenda Selection from Header Menu
   const handleAgendaSelect = (agendaId: number) => {
+    // 1. Check if locked or waiting for timer
     if (isAgendaLocked(agendaId)) {
-      // Check if it's locked due to time
       if (unlockTimes[agendaId] && Date.now() < unlockTimes[agendaId]) {
         alert("Agenda ini sedang diproses. Harap tunggu hingga waktu hitung mundur selesai.");
       } else {
@@ -128,9 +128,12 @@ const AppContent: React.FC = () => {
       }
       return;
     }
+
+    // 2. Set Current Agenda
     setCurrentAgenda(agendaId);
     setSelectedProduct(null); // Reset selected product to show list
     setShowPayment(false);
+    
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -257,6 +260,8 @@ const AppContent: React.FC = () => {
       />
 
       <main className="flex-grow max-w-4xl mx-auto px-4 md:px-8 pt-2 w-full relative">
+        {/* VIEW LOGIC: Product Details -> Collection -> Agenda List */}
+        
         {selectedProduct ? (
           /* Check flow: Show Payment Page OR Confirmation Page */
           showPayment ? (
