@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
   };
 
   const handleContactClick = () => {
-    const phoneNumber = "6281356112840";
+    const phoneNumber = "6282277585880";
     const message = "Hallo , saya peserta Gucci membutuhkan bantuan , terimakasih";
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(url, '_blank');
