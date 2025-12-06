@@ -1,5 +1,3 @@
-
-
 import { Product } from './types';
 
 const BASE_PRODUCTS: Product[] = [
@@ -53,7 +51,6 @@ const AGENDA_PRICES: Record<number, number[]> = {
 // Image Override Configuration map
 const AGENDA_IMAGES: Record<number, Record<number, string>> = {
   1: {
-    1: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1758137467/860787_AAEE7_7702_001_100_0000_Light.jpg",
     3: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1747845099/847090_FAEUC_9758_001_065_0000_Light.jpg",
     4: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1758728705/857595_FAFUF_9870_001_085_0000_Light.jpg"
   },
@@ -86,7 +83,6 @@ const AGENDA_IMAGES: Record<number, Record<number, string>> = {
 // Name Override Configuration map
 const AGENDA_NAMES: Record<number, Record<number, string>> = {
   1: {
-    1: "Gucci Half Horsebit Medium Shoulder Bag",
     3: "GG Emblem Nano Bucket Bag",
     4: "Ophidia Medium Boston Bag"
   },
