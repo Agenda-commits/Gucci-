@@ -155,37 +155,15 @@ const AppContent: React.FC = () => {
 
   // Handle Initial Confirm Button Click (Pre-Payment or Direct)
   const handleConfirmOrder = () => {
-    if (currentAgenda === 1) {
-      // For Agenda 1, show Payment Page first
-      setShowPayment(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      // For others, proceed directly
-      finalizeOrder();
-    }
+    // Always show Payment/Proof page now to allow screenshot
+    setShowPayment(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Finalize Order (Send WA, Approve, Move Next)
+  // Finalize Order (Approve, Move Next - NO WHATSAPP)
   const finalizeOrder = () => {
-    // WA Logic first
-    if (selectedProduct) {
-      if (currentAgenda === 1) {
-        // Agenda 1 specific logic - Updated Number
-        const phoneNumber = "6281325808529";
-        const message = `Halo Admin, saya telah memilih Agenda no 1 Paket No ${selectedProduct.id} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
-        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
-      } else {
-        // Logic for Agenda 2, 3, 4, 5 and Collection (100)
-        const phoneNumber = "6282130903916";
-        const agendaName = currentAgenda === 100 ? "COLLECTION" : `${currentAgenda}`;
-        const productId = currentAgenda === 100 ? "1" : selectedProduct.id;
-        const message = `Hallo , Advisor saya telah memilih Agenda no ${agendaName} Paket No ${productId} harga Rp ${selectedProduct.price}. Mohon proses paket saya:\nProduk: ${selectedProduct.name}\nKeuntungan: ${selectedProduct.profit}`;
-        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-        window.open(url, '_blank');
-      }
-    }
-
+    // WHATSAPP REMOVED - The user now takes a screenshot instead.
+    
     // STATE UPDATE LOGIC (Looping vs Progression)
     if (currentAgenda === 5) {
       // LOOP LOGIC: 

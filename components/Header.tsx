@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ShoppingBag, User, Menu, Plus, X, CheckCircle, Lock, Globe } from 'lucide-react';
+import { ShoppingBag, User, Menu, X, CheckCircle, Lock, Globe } from 'lucide-react';
 import { useLanguage, LANGUAGES, LanguageCode } from '../LanguageContext';
 
 interface HeaderProps {
@@ -23,13 +23,6 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
     if (isLocked) return;
     onSelectAgenda(id);
     setIsMenuOpen(false);
-  };
-
-  const handleContactClick = () => {
-    const phoneNumber = "6282277585880";
-    const message = "Hallo , saya peserta Gucci membutuhkan bantuan , terimakasih";
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-    window.open(url, '_blank');
   };
 
   const handleWebClick = () => {
@@ -106,17 +99,6 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
               {isMenuOpen ? <X size={20} strokeWidth={1.5} /> : <Menu size={20} strokeWidth={1.5} />}
             </button>
           </div>
-        </div>
-
-        {/* Sub-header contact link */}
-        <div className="px-4 py-3 md:px-8 bg-white relative z-10">
-          <button 
-            onClick={handleContactClick}
-            className="flex items-center text-[10px] font-bold uppercase tracking-widest text-black hover:opacity-70 transition-opacity"
-          >
-            <Plus size={10} className="mr-1" strokeWidth={3} />
-            {t('contact_us')}
-          </button>
         </div>
       </header>
 
