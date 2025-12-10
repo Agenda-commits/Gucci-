@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { ProductCard } from './components/ProductCard';
@@ -40,6 +41,17 @@ const AppContent: React.FC = () => {
   
   const [approvedAgendas, setApprovedAgendas] = useState<number[]>([]);
   const [unlockTimes, setUnlockTimes] = useState<Record<number, number>>({});
+  
+  // State dummy untuk memicu re-render setiap detik agar kunci terbuka otomatis secara visual
+  const [, setTick] = useState(0);
+
+  // Interval untuk mengecek waktu setiap detik (Invisible Timer Checker)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick(tick => tick + 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const storedApproved = localStorage.getItem('gucci_approved_agendas');
@@ -78,12 +90,29 @@ const AppContent: React.FC = () => {
   };
 
   const handlePaymentSuccess = () => {
-    // Approve current agenda locally
+    // 1. Approve current agenda locally
     const updatedApproved = [...approvedAgendas];
     if (!updatedApproved.includes(currentAgenda)) {
       updatedApproved.push(currentAgenda);
       setApprovedAgendas(updatedApproved);
       localStorage.setItem('gucci_approved_agendas', JSON.stringify(updatedApproved));
+    }
+
+    // 2. Set Invisible Unlock Timer for the NEXT Agenda (5 Minutes)
+    // Jika user menyelesaikan Agenda 1, maka Agenda 2 akan terkunci selama 5 menit.
+    // User tidak melihat timer, tapi Header akan mengecek 'unlockTimes' vs 'Date.now()'
+    const nextAgendaId = currentAgenda + 1;
+    
+    // Hanya set timer jika agenda berikutnya valid (misal agenda 2,3,4,5)
+    if (nextAgendaId <= 5) {
+      const fiveMinutesInMs = 5 * 60 * 1000; 
+      // const fiveMinutesInMs = 10000; // Debugging: 10 detik
+      
+      const unlockTime = Date.now() + fiveMinutesInMs;
+      
+      const newUnlockTimes = { ...unlockTimes, [nextAgendaId]: unlockTime };
+      setUnlockTimes(newUnlockTimes);
+      localStorage.setItem('gucci_unlock_times', JSON.stringify(newUnlockTimes));
     }
 
     // Reset view to list
