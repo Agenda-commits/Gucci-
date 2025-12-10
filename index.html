@@ -1,40 +1,14 @@
+
 <!DOCTYPE html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gucci Agenda</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-      /* AGGRESSIVE GOOGLE TRANSLATE HIDING */
-      .skiptranslate, 
-      .goog-te-banner-frame, 
-      .goog-te-gadget-icon, 
-      #google_translate_element, 
-      .goog-tooltip, 
-      .goog-te-balloon-frame {
-        display: none !important;
-        visibility: hidden !important;
-        height: 0 !important;
-        width: 0 !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-      }
-      
-      body {
-        top: 0 !important;
-        position: static !important;
-      }
-      
-      /* Hide "Translated by Google" tooltip */
-      #goog-gt-tt {
-        display: none !important;
-        visibility: hidden !important;
-      }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
@@ -51,18 +25,47 @@
         }
       }
     </script>
+    <style>
+      /* AGGRESSIVE GOOGLE TRANSLATE HIDING */
+      .skiptranslate, 
+      .goog-te-banner-frame, 
+      .goog-te-gadget-icon, 
+      #google_translate_element, 
+      .goog-tooltip, 
+      .goog-te-balloon-frame {
+        display: none !important;
+        visibility: hidden !important;
+        height: 0 !important;
+        width: 0 !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+      }
+
+      body {
+        top: 0 !important;
+        position: static !important;
+      }
+
+      /* Hide "Translated by Google" tooltip */
+      #goog-gt-tt {
+        display: none !important;
+        visibility: hidden !important;
+      }
+    </style>
     <script type="importmap">
 {
   "imports": {
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
-    "html2canvas": "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/+esm"
+    "react": "https://esm.sh/react@18.2.0",
+    "react/jsx-runtime": "https://esm.sh/react@18.2.0/jsx-runtime",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.378.0?deps=react@18.2.0",
+    "html2canvas": "https://esm.sh/html2canvas@1.4.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/"
   }
 }
 </script>
-</head>
+  </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
