@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, ReactNode } from 'react';
 
 // 1. Define Supported Languages
@@ -19,7 +20,7 @@ export const LANGUAGES: { code: LanguageCode; name: string }[] = [
 // 2. Dictionary / Translations
 const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
   id: {
-    agenda: 'AGENDA',
+    agenda: 'TUGAS',
     price: 'Harga',
     benefit: 'Benefit',
     profit: 'Keuntungan',
@@ -58,7 +59,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     fill_fields: 'Harap isi semua kolom',
   },
   en: {
-    agenda: 'AGENDA',
+    agenda: 'TASK',
     price: 'Price',
     benefit: 'Benefit',
     profit: 'Profit',
@@ -97,7 +98,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     fill_fields: 'Please fill in all fields',
   },
   zh: {
-    agenda: '议程',
+    agenda: '任务',
     price: '价格',
     benefit: '利益',
     profit: '利润',
@@ -136,7 +137,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     fill_fields: '请填写所有字段',
   },
   es: {
-    agenda: 'AGENDA',
+    agenda: 'TAREA',
     price: 'Precio',
     benefit: 'Beneficio',
     profit: 'Ganancia',
@@ -175,17 +176,17 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     fill_fields: 'Por favor complete todos los campos',
   },
   hi: {
-    agenda: 'एजेंडा',
+    agenda: 'कार्य',
     price: 'कीमत',
     benefit: 'लाभ',
     profit: 'मुनाफा',
     select: 'चुनें',
     approved: 'स्वीकृत',
-    recommended: 'अनुशंसित',
+    recommended: 'अनुशंसিত',
     contact_us: 'संपर्क करें',
     confirm_order: 'आर्डर की पुष्टि करें',
-    back: 'वापस',
-    cancel: 'रद्द करें',
+    back: 'वाپस',
+    cancel: 'رद्द करें',
     order_confirmation: 'आर्डर पुष्टिकरण',
     please_review: 'कृपया नीचे अपने चयन की समीक्षा करें',
     selected: 'चयनित',
@@ -211,10 +212,10 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     processing: 'प्रक्रिया जारी है...',
     enter_world: 'GUCCI की दुनिया में प्रवेश करें',
     copyright: '© 2025 Guccio Gucci S.p.A.',
-    fill_fields: 'कृपया सभी फ़ील्ड भरें',
+    fill_fields: 'कृपया semua फ़ील्ड भरें',
   },
   ar: {
-    agenda: 'جدول أعمال',
+    agenda: 'مهمة',
     price: 'السعر',
     benefit: 'الفائدة',
     profit: 'الربح',
@@ -253,7 +254,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     fill_fields: 'يرجى ملء جميع الحقول',
   },
   fr: {
-    agenda: 'AGENDA',
+    agenda: 'TACHE',
     price: 'Prix',
     benefit: 'Avantage',
     profit: 'Profit',
@@ -292,7 +293,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     fill_fields: 'Veuillez remplir tous les champs',
   },
   de: {
-    agenda: 'AGENDA',
+    agenda: 'AUFGABE',
     price: 'Preis',
     benefit: 'Vorteil',
     profit: 'Gewinn',
@@ -331,7 +332,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     fill_fields: 'Bitte füllen Sie alle Felder aus',
   },
   ja: {
-    agenda: 'アジェンダ',
+    agenda: 'タスク',
     price: '価格',
     benefit: '利益',
     profit: '利益',
@@ -370,7 +371,7 @@ const DICTIONARY: Record<LanguageCode, Record<string, string>> = {
     fill_fields: 'すべての項目に入力してください',
   },
   ko: {
-    agenda: '의제',
+    agenda: '과제',
     price: '가격',
     benefit: '혜택',
     profit: '이익',
