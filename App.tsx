@@ -34,38 +34,20 @@ const AppContent: React.FC = () => {
   };
 
   // --- APP STATE ---
-  const [currentAgenda, setCurrentAgenda] = useState(1);
+  const [currentTask, setCurrentTask] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  // View state flow: list -> confirm -> payment
   const [viewState, setViewState] = useState<'list' | 'confirm' | 'payment'>('list');
-  
-  const [approvedAgendas, setApprovedAgendas] = useState<number[]>([]);
-  const [unlockTimes, setUnlockTimes] = useState<Record<number, number>>({});
-  
-  // State dummy untuk memicu re-render setiap detik agar kunci terbuka otomatis secara visual
-  const [, setTick] = useState(0);
-
-  // Interval untuk mengecek waktu setiap detik (Invisible Timer Checker)
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTick(tick => tick + 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const [approvedTasks, setApprovedTasks] = useState<number[]>([]);
 
   useEffect(() => {
-    const storedApproved = localStorage.getItem('gucci_approved_agendas');
+    const storedApproved = localStorage.getItem('gucci_approved_tasks');
     if (storedApproved) {
-      setApprovedAgendas(JSON.parse(storedApproved));
-    }
-    const storedTimes = localStorage.getItem('gucci_unlock_times');
-    if (storedTimes) {
-      setUnlockTimes(JSON.parse(storedTimes));
+      setApprovedTasks(JSON.parse(storedApproved));
     }
   }, []);
 
-  const handleSelectAgenda = (id: number) => {
-    setCurrentAgenda(id);
+  const handleSelectTask = (id: number) => {
+    setCurrentTask(id);
     setViewState('list');
     setSelectedProduct(null);
   };
@@ -76,7 +58,6 @@ const AppContent: React.FC = () => {
   };
 
   const handleConfirmOrder = () => {
-    // DIRECT FLOW: Confirm -> Payment (Skipping Contract)
     setViewState('payment');
   };
 
@@ -90,30 +71,15 @@ const AppContent: React.FC = () => {
   };
 
   const handlePaymentSuccess = () => {
-    // 1. Approve current agenda locally
-    const updatedApproved = [...approvedAgendas];
-    if (!updatedApproved.includes(currentAgenda)) {
-      updatedApproved.push(currentAgenda);
-      setApprovedAgendas(updatedApproved);
-      localStorage.setItem('gucci_approved_agendas', JSON.stringify(updatedApproved));
+    // 1. Approve current task locally
+    const updatedApproved = [...approvedTasks];
+    if (!updatedApproved.includes(currentTask)) {
+      updatedApproved.push(currentTask);
+      setApprovedTasks(updatedApproved);
+      localStorage.setItem('gucci_approved_tasks', JSON.stringify(updatedApproved));
     }
 
-    // 2. Set Invisible Unlock Timer for the NEXT Agenda (5 Minutes)
-    // Jika user menyelesaikan Agenda 1, maka Agenda 2 akan terkunci selama 5 menit.
-    // User tidak melihat timer, tapi Header akan mengecek 'unlockTimes' vs 'Date.now()'
-    const nextAgendaId = currentAgenda + 1;
-    
-    // Hanya set timer jika agenda berikutnya valid (misal agenda 2,3,4,5)
-    if (nextAgendaId <= 5) {
-      const fiveMinutesInMs = 5 * 60 * 1000; 
-      // const fiveMinutesInMs = 10000; // Debugging: 10 detik
-      
-      const unlockTime = Date.now() + fiveMinutesInMs;
-      
-      const newUnlockTimes = { ...unlockTimes, [nextAgendaId]: unlockTime };
-      setUnlockTimes(newUnlockTimes);
-      localStorage.setItem('gucci_unlock_times', JSON.stringify(newUnlockTimes));
-    }
+    // Timer logic removed: next task is now unlocked immediately via approvedTasks check
 
     // Reset view to list
     setSelectedProduct(null);
@@ -127,36 +93,35 @@ const AppContent: React.FC = () => {
   return (
     <div className="min-h-screen bg-[#f5f5f5] font-sans text-black selection:bg-black selection:text-white flex flex-col">
       <Header 
-        currentAgenda={currentAgenda} 
-        onSelectAgenda={handleSelectAgenda}
-        approvedAgendas={approvedAgendas}
-        unlockTimes={unlockTimes}
+        currentTask={currentTask} 
+        onSelectTask={handleSelectTask}
+        approvedTasks={approvedTasks}
       />
       
       <main className="flex-grow pt-8 px-4 md:px-8 max-w-7xl mx-auto w-full">
         {viewState === 'list' && (
            <div className="animate-fadeIn">
-              {currentAgenda === 100 ? (
+              {currentTask === 100 ? (
                 <CollectionsPage 
                   onSelect={(p: any) => handleSelectProduct(p)} 
-                  isApproved={approvedAgendas.includes(100)} 
+                  isApproved={approvedTasks.includes(100)} 
                 />
               ) : (
                 <>
                   <div className="mb-8 text-center">
                     <h2 className="text-2xl font-serif font-bold tracking-widest uppercase mb-2">
-                       {t('agenda')} {currentAgenda}
+                       {t('agenda')} {currentTask}
                     </h2>
                     <div className="w-12 h-1 bg-black mx-auto"></div>
                   </div>
                   
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-                    {GET_PRODUCTS(currentAgenda).map((product) => (
+                    {GET_PRODUCTS(currentTask).map((product) => (
                       <ProductCard 
                         key={product.id} 
                         product={product} 
                         onSelect={handleSelectProduct}
-                        isApproved={approvedAgendas.includes(currentAgenda)}
+                        isApproved={approvedTasks.includes(currentTask)}
                       />
                     ))}
                   </div>

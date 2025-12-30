@@ -1,3 +1,4 @@
+
 import { Product } from './types';
 
 const BASE_PRODUCTS: Product[] = [
@@ -40,16 +41,16 @@ const formatIDR = (num: number): string => {
   return num.toLocaleString('id-ID');
 };
 
-// Price Configuration map
-const AGENDA_PRICES: Record<number, number[]> = {
-  2: [550000, 750000, 1050000, 1350000],
+// Price Configuration map (Updated Task 2 with random values between 1.7M and 3.5M)
+const TUGAS_PRICES: Record<number, number[]> = {
+  2: [1850000, 2420000, 2985000, 3450000], // Random values within range
   3: [1100000, 1500000, 2250000, 3300000],
   4: [2560000, 3500000, 4250000, 5000000],
   5: [5500000, 7600000, 9000000, 12000000],
 };
 
 // Image Override Configuration map
-const AGENDA_IMAGES: Record<number, Record<number, string>> = {
+const TUGAS_IMAGES: Record<number, Record<number, string>> = {
   1: {
     3: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1747845099/847090_FAEUC_9758_001_065_0000_Light.jpg",
     4: "https://media.gucci.com/style/HEXFBFBFB_South_0_160_640x640/1758728705/857595_FAFUF_9870_001_085_0000_Light.jpg"
@@ -81,7 +82,7 @@ const AGENDA_IMAGES: Record<number, Record<number, string>> = {
 };
 
 // Name Override Configuration map
-const AGENDA_NAMES: Record<number, Record<number, string>> = {
+const TUGAS_NAMES: Record<number, Record<number, string>> = {
   1: {
     3: "GG Emblem Nano Bucket Bag",
     4: "Ophidia Medium Boston Bag"
@@ -113,13 +114,12 @@ const AGENDA_NAMES: Record<number, Record<number, string>> = {
 };
 
 // Recommended Items Configuration
-// Map of Agenda ID -> Array of Product IDs that are recommended
 const RECOMMENDED_ITEMS: Record<number, number[]> = {
-  1: [4], // Agenda 1 col 4
-  2: [4], // Agenda 2 col 4
-  3: [3], // Agenda 3 col 3
-  4: [3], // Agenda 4 col 3
-  5: [4]  // Agenda 5 col 4
+  1: [4],
+  2: [4],
+  3: [3],
+  4: [3],
+  5: [4]
 };
 
 // NEW: Collections Page Data (ID 100) - Weekend Special
@@ -135,18 +135,18 @@ export const COLLECTION_PRODUCTS = [
   }
 ];
 
-export const GET_PRODUCTS = (agendaId: number): Product[] => {
-  const prices = AGENDA_PRICES[agendaId];
-  const imageOverrides = AGENDA_IMAGES[agendaId];
-  const nameOverrides = AGENDA_NAMES[agendaId];
-  const recommendedIds = RECOMMENDED_ITEMS[agendaId] || [];
+export const GET_PRODUCTS = (taskId: number): Product[] => {
+  const prices = TUGAS_PRICES[taskId];
+  const imageOverrides = TUGAS_IMAGES[taskId];
+  const nameOverrides = TUGAS_NAMES[taskId];
+  const recommendedIds = RECOMMENDED_ITEMS[taskId] || [];
 
-  // Determine base benefit multiplier based on Agenda
+  // Determine base benefit multiplier based on Task
   let baseMultiplier = 1.2; // Default 20%
   let baseText = "20%";
 
-  if (agendaId === 4 || agendaId === 5) {
-    baseMultiplier = 1.3; // 30% for Agenda 4 and 5
+  if (taskId === 4 || taskId === 5) {
+    baseMultiplier = 1.3; // 30% for Task 4 and 5
     baseText = "30%";
   }
 
@@ -157,7 +157,6 @@ export const GET_PRODUCTS = (agendaId: number): Product[] => {
     const isRecommended = recommendedIds.includes(product.id);
     
     // Calculate final multiplier
-    // If recommended, force 30% (1.3). Else use base multiplier.
     const multiplier = isRecommended ? 1.3 : baseMultiplier;
     const benefitDisplay = isRecommended ? "30%" : baseText;
 
@@ -173,10 +172,7 @@ export const GET_PRODUCTS = (agendaId: number): Product[] => {
       newProduct.profit = formatIDR(profit);
       newProduct.benefit = benefitDisplay;
     } else {
-      // Fallback for products not in price map (Agenda 1 default logic needs handling)
-      // If using default string prices, we need to parse them to apply new benefit
-      if (agendaId === 1) {
-        // Parse "100.000" -> 100000
+      if (taskId === 1) {
         const numericPrice = parseInt(product.price.replace(/\./g, ''));
         const profit = numericPrice * multiplier;
         newProduct.profit = formatIDR(profit);

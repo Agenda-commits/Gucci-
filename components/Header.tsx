@@ -4,13 +4,12 @@ import { ShoppingBag, User, Menu, X, CheckCircle, Lock, Globe } from 'lucide-rea
 import { useLanguage, LANGUAGES, LanguageCode } from '../LanguageContext';
 
 interface HeaderProps {
-  currentAgenda: number;
-  onSelectAgenda: (id: number) => void;
-  approvedAgendas: number[];
-  unlockTimes: Record<number, number>;
+  currentTask: number;
+  onSelectTask: (id: number) => void;
+  approvedTasks: number[];
 }
 
-export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, approvedAgendas = [], unlockTimes = {} }) => {
+export const Header: React.FC<HeaderProps> = ({ currentTask, onSelectTask, approvedTasks = [] }) => {
   const { t, language, setLanguage } = useLanguage();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
@@ -19,9 +18,9 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const handleAgendaClick = (id: number, isLocked: boolean) => {
+  const handleTaskClick = (id: number, isLocked: boolean) => {
     if (isLocked) return;
-    onSelectAgenda(id);
+    onSelectTask(id);
     setIsMenuOpen(false);
   };
 
@@ -34,19 +33,17 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
   };
   
   const handleLogoClick = () => {
-    onSelectAgenda(1);
+    onSelectTask(1);
   };
 
   const isLocked = (id: number) => {
     if (id === 1) return false; 
     
-    // Time Lock Check
-    if (unlockTimes[id] && Date.now() < unlockTimes[id]) {
-      return true;
-    }
-
-    if (id === 100) return !approvedAgendas.includes(1);
-    return !approvedAgendas.includes(id - 1);
+    // Task 100 (Collections) is unlocked if Task 1 is approved
+    if (id === 100) return !approvedTasks.includes(1);
+    
+    // Sequential Unlock: Task N is unlocked if Task N-1 is approved
+    return !approvedTasks.includes(id - 1);
   };
 
   return (
@@ -102,7 +99,7 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
         </div>
       </header>
 
-      {/* Full Screen Menu Overlay (Agenda) */}
+      {/* Full Screen Menu Overlay */}
       {isMenuOpen && (
         <div className="fixed inset-0 bg-white z-50 flex flex-col animate-fadeIn pt-24 px-8 overflow-y-auto">
           <div className="absolute top-0 left-0 right-0 px-4 py-4 md:px-8 flex justify-end border-b border-transparent">
@@ -115,19 +112,19 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
             <h2 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-4">{t('select')} {t('agenda')}</h2>
             {[1, 2, 3, 4, 5].map((num) => {
               const locked = isLocked(num);
-              const approved = approvedAgendas.includes(num);
+              const approved = approvedTasks.includes(num);
               
               return (
                 <button
                   key={num}
-                  onClick={() => handleAgendaClick(num, locked)}
+                  onClick={() => handleTaskClick(num, locked)}
                   disabled={locked}
                   className={`text-2xl font-serif tracking-widest transition-colors flex items-center gap-3 ${
-                    currentAgenda === num ? 'text-black font-bold' : 
+                    currentTask === num ? 'text-black font-bold' : 
                     locked ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:text-black'
                   }`}
                 >
-                  <span className={currentAgenda === num ? 'border-b-2 border-black pb-1' : ''}>
+                  <span className={currentTask === num ? 'border-b-2 border-black pb-1' : ''}>
                     {t('agenda')} {num}
                   </span>
                   
@@ -146,17 +143,17 @@ export const Header: React.FC<HeaderProps> = ({ currentAgenda, onSelectAgenda, a
             <div className="w-12 h-px bg-gray-200 my-8"></div>
             
             <button 
-              onClick={() => handleAgendaClick(100, isLocked(100))}
+              onClick={() => handleTaskClick(100, isLocked(100))}
               disabled={isLocked(100)}
               className={`text-sm font-bold uppercase tracking-widest transition-colors flex items-center gap-2 ${
-                currentAgenda === 100 ? 'text-black border-b border-black' : 
+                currentTask === 100 ? 'text-black border-b border-black' : 
                 isLocked(100) ? 'text-gray-300 cursor-not-allowed' : 'text-black hover:opacity-70'
               }`}
             >
               Collections
               {isLocked(100) && <Lock size={12} />}
               
-              {!isLocked(100) && approvedAgendas.includes(100) && (
+              {!isLocked(100) && approvedTasks.includes(100) && (
                 <div className="flex items-center bg-green-100 text-green-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ml-2">
                   <CheckCircle size={12} className="mr-1" />
                   {t('approved')}
