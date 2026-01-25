@@ -41,9 +41,9 @@ const formatIDR = (num: number): string => {
   return num.toLocaleString('id-ID');
 };
 
-// Price Configuration map (Updated Task 2 with random values between 1.7M and 3.5M)
+// Price Configuration map
 const TUGAS_PRICES: Record<number, number[]> = {
-  2: [1850000, 2420000, 2985000, 3450000], // Random values within range
+  2: [550000, 750000, 1050000, 1350000], // Updated to specific requested values
   3: [1100000, 1500000, 2250000, 3300000],
   4: [2560000, 3500000, 4250000, 5000000],
   5: [5500000, 7600000, 9000000, 12000000],
